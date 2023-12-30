@@ -16,10 +16,11 @@ class Styles
 
     function read(path:String):Void
     {
-        var key = 'tools/${path}/styles.json';
+        var key = 'tools/${path}/styles.css';
         if(!FileSystem.exists(key))
             throw 'Tool lacks a "styles" file';
 
-        styleData = Json.parse(File.getContent(key));
+        // to-do: implement css-parsing
+        // styleData = Json.parse(File.getContent(key));
     }
 }

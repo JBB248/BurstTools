@@ -6,6 +6,8 @@ import sys.io.File;
 
 class Home
 {
+    public var root:Access;
+
     public var head:Access;
     public var hasHead(get, never):Bool;
 
@@ -41,31 +43,36 @@ class Home
     
     public function read(path:String):Void
     {
-        var key = 'tools/${path}/index.xml';
+        var key = 'tools/${path}/index.html';
         if(!FileSystem.exists(key))
             throw 'Tool lacks a "home" file';
 
         var xml = Xml.parse(File.getContent(key));
         var data = new Access(xml);
 
-        readHead(data);
-        readBody(data);
+        if(!data.hasNode.html)
+            throw 'Home does not contain root "html" node';
+
+        this.root = data.node.html;
+
+        readHead();
+        readBody();
     }
 
-    function readHead(data:Access):Void
+    function readHead():Void
     {
-        if(!data.hasNode.head)
+        if(!root.hasNode.head)
             throw 'Home does not contain a "head" node';
 
-        this.head = data.node.head;
+        this.head = root.node.head;
     }
 
-    function readBody(data:Access):Void
+    function readBody():Void
     {
-        if(!data.hasNode.body)
+        if(!root.hasNode.body)
             throw 'Home does not contain a "body" node';
 
-        this.body = data.node.body;
+        this.body = root.node.body;
     }
 }
 
